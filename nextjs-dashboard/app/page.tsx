@@ -5,11 +5,12 @@ import styles from "@/app/ui/home.module.css";
 import { lusitana } from "./ui/fonts";
 import Image from "next/image";
 
+// TODO: Delte this page probably?
 export default function Page() {
   return (
     // TODO - Change this
     <main className="flex min-h-screen flex-col p-6">
-      <div className="flex h-20 shrink-0 items-end rounded-lg bg-purple-500 p-4 md:h-52">
+      <div className="flex h-20 shrink-0 items-end rounded-lg bg-purple-900 p-4 md:h-52">
         <AcmeLogo />
       </div>
       <div className="mt-4 flex grow flex-col gap-4 md:flex-row">
