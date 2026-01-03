@@ -1,8 +1,14 @@
-import bcrypt from 'bcrypt';
-import postgres from 'postgres';
-import { invoices, customers, revenue, users } from '../lib/placeholder-data';
+import bcrypt from "bcrypt";
+import postgres from "postgres";
+import {
+  invoices,
+  customers,
+  revenue,
+  users,
+  exercises,
+} from "../lib/placeholder-data";
 
-const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
+const sql = postgres(process.env.POSTGRES_URL!, { ssl: "require" });
 
 async function seedUsers() {
   await sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
@@ -23,7 +29,7 @@ async function seedUsers() {
         VALUES (${user.id}, ${user.name}, ${user.email}, ${hashedPassword})
         ON CONFLICT (id) DO NOTHING;
       `;
-    }),
+    })
   );
 
   return insertedUsers;
@@ -48,8 +54,8 @@ async function seedInvoices() {
         INSERT INTO invoices (customer_id, amount, status, date)
         VALUES (${invoice.customer_id}, ${invoice.amount}, ${invoice.status}, ${invoice.date})
         ON CONFLICT (id) DO NOTHING;
-      `,
-    ),
+      `
+    )
   );
 
   return insertedInvoices;
@@ -73,8 +79,8 @@ async function seedCustomers() {
         INSERT INTO customers (id, name, email, image_url)
         VALUES (${customer.id}, ${customer.name}, ${customer.email}, ${customer.image_url})
         ON CONFLICT (id) DO NOTHING;
-      `,
-    ),
+      `
+    )
   );
 
   return insertedCustomers;
@@ -94,11 +100,36 @@ async function seedRevenue() {
         INSERT INTO revenue (month, revenue)
         VALUES (${rev.month}, ${rev.revenue})
         ON CONFLICT (month) DO NOTHING;
-      `,
-    ),
+      `
+    )
   );
 
   return insertedRevenue;
+}
+
+async function seedExercises() {
+  await sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS exercises (
+      id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+      name VARCHAR(255) NOT NULL UNIQUE,
+      current_pr INT,
+      last_performed DATE NOT NULL
+    );
+  `;
+
+  const insertedExercises = await Promise.all(
+    exercises.map(
+      (exercise) => sql`
+        INSERT INTO exercises (id, name, current_pr, last_performed)
+        VALUES (${exercise.id}, ${exercise.name}, ${exercise.current_pr}, ${exercise.last_performed})
+        ON CONFLICT (id) DO NOTHING;
+      `
+    )
+  );
+
+  return insertedExercises;
 }
 
 export async function GET() {
@@ -108,9 +139,10 @@ export async function GET() {
       seedCustomers(),
       seedInvoices(),
       seedRevenue(),
+      seedExercises(),
     ]);
 
-    return Response.json({ message: 'Database seeded successfully' });
+    return Response.json({ message: "Database seeded successfully" });
   } catch (error) {
     return Response.json({ error }, { status: 500 });
   }

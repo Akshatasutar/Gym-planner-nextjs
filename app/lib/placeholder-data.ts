@@ -149,31 +149,31 @@ const exercises = [
   {
     id: "11234cc-qaqq131-2342-2334sdds",
     name: "Romanian Deadlifts",
-    target_muscles: ["Glutes", "Hamstrings", "other"],
+    // target_muscles: ["Glutes", "Hamstrings", "other"],
     current_pr: 40,
     last_performed: "2025-12-29",
   },
   {
     id: "51294cc-qiee131-7842-8744ejyp",
     name: "Barbell squats",
-    target_muscles: ["Glutes", "Quads", "other"],
+    // target_muscles: ["Glutes", "Quads", "other"],
     current_pr: 30,
     last_performed: "2025-09-06",
   },
   {
     id: "76685c26-f534-44f2-ac76-582577f7c2y1",
     name: "Skullcrushers",
-    target_muscles: ["Triceps", "Pecs"],
+    // target_muscles: ["Triceps", "Pecs"],
     current_pr: 12,
     last_performed: "2025-07-15",
   },
   {
     id: "8958cs9e-236f-4379-59e9-frc5b7a7732b",
     name: "Lateral raises",
-    target_muscles: ["Triceps", "Pecs"],
+    // target_muscles: ["Triceps", "Pecs"],
     current_pr: 8,
     last_performed: "2025-12-29",
   },
 ];
 
-export { users, customers, invoices, revenue };
+export { users, customers, invoices, revenue, exercises };
