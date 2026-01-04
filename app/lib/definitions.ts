@@ -96,7 +96,7 @@ export type Muscle = {
 export type Exercise = {
   id: string;
   name: string;
-  // target_muscles: Muscle[];
+  target_muscles: string[];
   current_pr?: number;
   date_of_pr?: string;
   last_performed?: string;

@@ -223,8 +223,18 @@ export async function fetchFilteredCustomers(query: string) {
 export async function fetchExercises() {
   try {
     const exercisesData = await sql<Exercise[]>`
-      SELECT * FROM exercises
-        ORDER BY last_performed desc nulls last`;
+      SELECT 
+        exercises.id,
+        exercises.name AS name,
+        current_pr,
+        date_of_pr,
+        last_performed,
+        array_agg(muscle_groups.name) AS target_muscles
+      FROM exercises
+        LEFT JOIN muscles_exercises_map ON exercises.id = muscles_exercises_map.exrcise_id
+        LEFT JOIN muscle_groups ON muscles_exercises_map.muscle_group_id = muscle_groups.id
+      GROUP BY exercises.id
+      ORDER BY last_performed desc nulls last`;
 
     return exercisesData;
   } catch (error) {

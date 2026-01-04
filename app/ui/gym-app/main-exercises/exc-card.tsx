@@ -1,14 +1,8 @@
 "use client";
 import { Exercise } from "@/app/lib/definitions";
-import Search from "../../search";
 import MusclePill from "../../muscle-pill";
 import { Button } from "../../button";
-import {
-  ArrowDownCircleIcon,
-  ChevronDownIcon,
-  ChevronUpIcon,
-} from "@heroicons/react/24/outline";
-import { ArrowDownIcon } from "@heroicons/react/20/solid";
+import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { formatDateToLocal, NULL_PLACEHOLDER } from "@/app/lib/utils";
 
@@ -23,15 +17,15 @@ export default function ExerciseCard({
     <div className="rounded-md bg-gray-50 p-2 mt-2 flex flex-row justify-between">
       <div>
         <p>{exercise.name}</p>
-        <div className="flex flex-row">
-          <MusclePill text={"hsdfgsdh"} />
-          <MusclePill text={"blahh mooscley"} />
+        <div className="flex flex-row flex-wrap">
+          {exercise.target_muscles?.map((muscle) => {
+            return muscle && <MusclePill key={muscle} text={muscle} />;
+          })}
         </div>
         <Button className="w-full p-1 bg-zinc-500 m-1"> Add to today</Button>
 
         {/* Details */}
         {isExpanded && (
-          // current PR , date of PR, last performed
           <div className="mt-4 text-sm text-grey-400">
             <p>
               PR{" : "}

@@ -19,7 +19,7 @@ export default function Page() {
           alt="Diagram of muscle groups"
         />
       </div>
-      <p className="text-xl text-purple-400 text-center">Happy exercising!</p>
+      <p className="text-xl text-purple-700 text-center">Happy exercising!</p>
     </>
   );
 }
