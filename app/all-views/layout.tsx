@@ -1,3 +1,4 @@
+import { lusitana } from "../ui/fonts";
 import GymSideNav from "../ui/gym-app/gym-sidenav";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -6,7 +7,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <div className="w-full flex-none md:w-64">
         <GymSideNav />
       </div>
-      <div className="grow p-6 md:overflow-y-auto md:p-12">{children}</div>
+      <div
+        className={`${lusitana.className} antialiased grow p-6 md:overflow-y-auto md:p-12`}
+      >
+        {children}
+      </div>
     </div>
   );
 }

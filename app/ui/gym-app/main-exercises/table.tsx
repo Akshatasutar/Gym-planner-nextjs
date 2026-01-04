@@ -23,15 +23,12 @@ export default async function ExercisesTable({
       <div className="mt-6 flow-root">
         <div className="overflow-x-auto">
           <div className="inline-block min-w-full align-middle">
-            <div className="overflow-hidden rounded-md bg-gray-50 p-2 md:pt-0">
-              <table className="hidden min-w-full rounded-md text-gray-900 md:table">
+            <div className="overflow-hidden rounded-md bg-gray-50 p-2">
+              <table className=" min-w-full rounded-md text-gray-900 md:table">
                 <thead className="rounded-md bg-gray-50 text-left text-m font-normal">
                   <tr>
                     <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
                       <strong>Name</strong>
-                    </th>
-                    <th scope="col" className="px-4 py-5 font-medium">
-                      <strong>Muscle group</strong>
                     </th>
                     <th scope="col" className="px-3 py-5 font-medium">
                       <strong>Current PR (in kgs / reps for bodyweight)</strong>
@@ -50,9 +47,7 @@ export default async function ExercisesTable({
                     <tr key={exercise.id} className="group">
                       <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
                         {exercise.name}
-                      </td>
-                      <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
-                        {"(null for now)"}
+                        {/* <pill></pill>  */}
                       </td>
                       <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
                         {exercise.current_pr}
