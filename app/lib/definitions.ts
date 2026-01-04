@@ -98,10 +98,18 @@ export type Exercise = {
   name: string;
   // target_muscles: Muscle[];
   current_pr?: number;
-  date_of_pr?: Date;
-  last_performed?: Date;
+  date_of_pr?: string;
+  last_performed?: string;
 };
 
 // Main exercise list (all),
+export type MainExercisesTableType = {
+  id: string;
+  name: string;
+  target_muscles: string[];
+  current_pr?: number;
+  date_of_pr?: string;
+  last_performed?: string;
+};
 // Current rotation list
 // Today's exercise list
