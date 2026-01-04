@@ -40,12 +40,6 @@ const customers = [
     email: "amy@burns.com",
     image_url: "/customers/amy-burns.png",
   },
-  {
-    id: "13D07535-C59E-4157-A011-F8D2EF4E0CBB",
-    name: "Balazs Orban",
-    email: "balazs@orban.com",
-    image_url: "/customers/balazs-orban.png",
-  },
 ];
 
 const invoices = [
@@ -74,7 +68,7 @@ const invoices = [
     date: "2023-09-10",
   },
   {
-    customer_id: customers[5].id,
+    customer_id: customers[2].id,
     amount: 34577,
     status: "pending",
     date: "2023-08-05",
@@ -104,7 +98,7 @@ const invoices = [
     date: "2023-06-17",
   },
   {
-    customer_id: customers[5].id,
+    customer_id: customers[2].id,
     amount: 8546,
     status: "paid",
     date: "2023-06-07",
@@ -116,7 +110,7 @@ const invoices = [
     date: "2023-08-19",
   },
   {
-    customer_id: customers[5].id,
+    customer_id: customers[2].id,
     amount: 8945,
     status: "paid",
     date: "2023-06-03",
@@ -147,31 +141,10 @@ const revenue = [
 // My data
 const exercises = [
   {
-    id: "11234cc-qaqq131-2342-2334sdds",
+    id: "13D07535-C59E-4157-A011-F8D2EF4E0CBB",
     name: "Romanian Deadlifts",
     // target_muscles: ["Glutes", "Hamstrings", "other"],
     current_pr: 40,
-    last_performed: "2025-12-29",
-  },
-  {
-    id: "51294cc-qiee131-7842-8744ejyp",
-    name: "Barbell squats",
-    // target_muscles: ["Glutes", "Quads", "other"],
-    current_pr: 30,
-    last_performed: "2025-09-06",
-  },
-  {
-    id: "76685c26-f534-44f2-ac76-582577f7c2y1",
-    name: "Skullcrushers",
-    // target_muscles: ["Triceps", "Pecs"],
-    current_pr: 12,
-    last_performed: "2025-07-15",
-  },
-  {
-    id: "8958cs9e-236f-4379-59e9-frc5b7a7732b",
-    name: "Lateral raises",
-    // target_muscles: ["Triceps", "Pecs"],
-    current_pr: 8,
     last_performed: "2025-12-29",
   },
 ];

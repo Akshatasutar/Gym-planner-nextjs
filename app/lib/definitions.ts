@@ -90,20 +90,7 @@ export type InvoiceForm = {
 // Now starts my actual app :)))
 export type Muscle = {
   id: string;
-  name:
-    | "Glutes"
-    | "Hamstrings"
-    | "Quads"
-    | "Calves"
-    | "Abs"
-    | "Obliques"
-    | "Pecs"
-    | "Delts"
-    | "Biceps"
-    | "Triceps"
-    | "Traps"
-    | "Lats"
-    | "other";
+  name: string;
 };
 
 export type Exercise = {
@@ -111,7 +98,8 @@ export type Exercise = {
   name: string;
   // target_muscles: Muscle[];
   current_pr?: number;
-  last_performed: Date;
+  date_of_pr?: Date;
+  last_performed?: Date;
 };
 
 // Main exercise list (all),
