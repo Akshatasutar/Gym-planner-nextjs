@@ -3,6 +3,7 @@ import styles from "@/app/ui/home.module.css";
 import { lusitana } from "../../ui/fonts";
 import { fetchExercises } from "@/app/lib/data-queries";
 import ExercisesTable from "@/app/ui/gym-app/main-exercises/table";
+import ExerciseCard from "@/app/ui/gym-app/main-exercises/exc-card";
 
 export default async function Page() {
   const allExercisesList = await fetchExercises();
@@ -22,7 +23,10 @@ export default async function Page() {
         here to add to the day's programme.
       </p>
       <div>
-        <ExercisesTable exercises={allExercisesList} />
+        {/* <ExercisesTable exercises={allExercisesList} /> */}
+        {allExercisesList.map((exercise) => {
+          return <ExerciseCard key={exercise.id} exercise={exercise} />;
+        })}
       </div>
     </main>
   );
