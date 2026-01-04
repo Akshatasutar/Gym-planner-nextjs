@@ -32,7 +32,7 @@ export default function GymNavLinks() {
             key={link.name}
             href={link.href}
             className={clsx(
-              "flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-violet-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3",
+              "flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-violet-100 hover:text-purple-600 active:text-purple-600 active:bg-transparent md:flex-none md:justify-start md:p-2 md:px-3",
               { "text-purple-600 bg-transparent": pathName === link.href }
             )}
           >

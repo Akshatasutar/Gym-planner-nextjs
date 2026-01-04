@@ -2,7 +2,11 @@
 import { Exercise } from "@/app/lib/definitions";
 import MusclePill from "../../muscle-pill";
 import { Button } from "../../button";
-import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline";
+import {
+  ChevronDownIcon,
+  ChevronUpIcon,
+  PencilIcon,
+} from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { formatDateToLocal, NULL_PLACEHOLDER } from "@/app/lib/utils";
 
@@ -15,23 +19,25 @@ export default function ExerciseCard({
 
   return (
     <div className="rounded-md bg-gray-50 p-2 mt-2 flex flex-row justify-between">
-      <div>
+      <div className="mr-2 w-full">
         <p>{exercise.name}</p>
         <div className="flex flex-row flex-wrap">
           {exercise.target_muscles?.map((muscle) => {
             return muscle && <MusclePill key={muscle} text={muscle} />;
           })}
         </div>
-        <Button className="w-full p-1 bg-zinc-500 m-1"> Add to today</Button>
 
         {/* Details */}
         {isExpanded && (
-          <div className="mt-4 text-sm text-grey-400">
+          <div className="mt-4 text-sm text-grey-400 p-2">
             <p>
               PR{" : "}
               <b>
                 <i>{exercise.current_pr}kg</i>
               </b>
+              <button className="active:bg-gray-200">
+                <PencilIcon className="h-4 w-4 text-gray-400 justify-end mr-1 active:outline-purple-600 ml-3 p-0" />
+              </button>
             </p>
             <p>{`on ${
               exercise.date_of_pr
@@ -47,6 +53,8 @@ export default function ExerciseCard({
             </p>
           </div>
         )}
+
+        <Button className="w-full p-1 bg-zinc-500 m-1"> Add to today</Button>
       </div>
       <button
         className="text-sm active:bg-gray-200"

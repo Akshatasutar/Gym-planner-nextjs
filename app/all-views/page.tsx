@@ -6,11 +6,14 @@ export default function Page() {
       <p> HWelcome!</p>
       <p> Hwhat do you hwant to do today? </p>
       <p>🦵🏽 🍑 💪🏽 🫁 🏋🏽‍♀️🤷🏽‍♀️</p>
+      <br></br>
+      <p>-</p>
+      <br></br>
       <p>
         Here is a diagram of muscle groups in case you forgot, as one tends to
         do.
       </p>
-      <div className="flex items-center justify-center p-6 md:w-3/5">
+      <div className="flex items-center justify-center p-4 md:w-3/5">
         <Image
           src="/muscle_groups_gym_bro_terms.png"
           width={560}
