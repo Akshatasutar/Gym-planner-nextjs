@@ -20,7 +20,7 @@ export default function ExerciseCard({
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <div className="rounded-md bg-gray-50 p-2 m-2 flex flex-row justify-between">
+    <div className="rounded-md bg-gray-50 p-2 mt-2 flex flex-row justify-between">
       <div>
         <p>{exercise.name}</p>
         <div className="flex flex-row">
