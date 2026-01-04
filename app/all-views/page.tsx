@@ -3,8 +3,9 @@ import Image from "next/image";
 export default function Page() {
   return (
     <>
-      <p> Home</p>
-      <p> Hwhat do you want to do today? </p>
+      <p> HWelcome!</p>
+      <p> Hwhat do you hwant to do today? </p>
+      <p>🦵🏽 🍑 💪🏽 🫁 🏋🏽‍♀️🤷🏽‍♀️</p>
       <p>
         Here is a diagram of muscle groups in case you forgot, as one tends to
         do.
@@ -18,6 +19,7 @@ export default function Page() {
           alt="Diagram of muscle groups"
         />
       </div>
+      <p className="text-xl text-purple-400 text-center">Happy exercising!</p>
     </>
   );
 }
