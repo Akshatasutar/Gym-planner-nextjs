@@ -1,10 +1,16 @@
 import { lusitana } from "../../ui/fonts";
-import { fetchExercises } from "@/app/lib/data-queries";
+import { fetchFilteredExercises } from "@/app/lib/data-queries";
 import ExerciseCard from "@/app/ui/gym-app/main-exercises/exc-card";
 import Search from "@/app/ui/search";
 
-export default async function Page() {
-  const allExercisesList = await fetchExercises();
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<{ query?: string }>;
+}) {
+  const query = (await searchParams).query;
+  // const allExercisesList = await fetchAllExercises();
+  const fiteredExercisesList = await fetchFilteredExercises(query || "");
 
   return (
     <main className="flex min-h-screen flex-col p-3">
@@ -20,12 +26,10 @@ export default async function Page() {
         add to the day's programme.
       </p>
       <div className="flex flex-row gap-2 flex-wrap">
-        <Search placeholder="Exercise name..." />
-        <Search placeholder="Muscle group..." />
+        <Search placeholder="Search exercise name or muscle group..." />
       </div>
       <div>
-        {/* <ExercisesTable exercises={allExercisesList} /> */}
-        {allExercisesList.map((exercise) => {
+        {fiteredExercisesList.map((exercise) => {
           return <ExerciseCard key={exercise.id} exercise={exercise} />;
         })}
       </div>

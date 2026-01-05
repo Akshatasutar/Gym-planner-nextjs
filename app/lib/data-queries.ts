@@ -220,7 +220,7 @@ export async function fetchFilteredCustomers(query: string) {
   }
 }
 
-export async function fetchExercises() {
+export async function fetchAllExercises() {
   try {
     const exercisesData = await sql<Exercise[]>`
       SELECT 
@@ -240,5 +240,29 @@ export async function fetchExercises() {
   } catch (error) {
     console.error("Eror fetching data from database: ", error);
     throw new Error("Failed to fetch exercise data.");
+  }
+}
+
+export async function fetchFilteredExercises(query: string) {
+  try {
+    const exercisesData = await sql<Exercise[]>`
+      SELECT 
+        exercises.id,
+        exercises.name AS name,
+        current_pr,
+        date_of_pr,
+        last_performed,
+        array_agg(muscle_groups.name) AS target_muscles
+      FROM exercises
+        LEFT JOIN muscles_exercises_map ON exercises.id = muscles_exercises_map.exrcise_id
+        LEFT JOIN muscle_groups ON muscles_exercises_map.muscle_group_id = muscle_groups.id
+      GROUP BY exercises.id
+      HAVING exercises.name ILIKE ${`%${query}%`} OR array_to_string(array_agg(muscle_groups.name),',') ILIKE ${`%${query}%`}
+      ORDER BY last_performed desc nulls last`;
+
+    return exercisesData;
+  } catch (error) {
+    console.error("Eror fetching data from database: ", error);
+    throw new Error("Failed to fetch filtered exercise data.");
   }
 }
