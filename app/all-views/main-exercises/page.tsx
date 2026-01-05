@@ -1,8 +1,5 @@
-import Link from "next/link";
-import styles from "@/app/ui/home.module.css";
 import { lusitana } from "../../ui/fonts";
 import { fetchExercises } from "@/app/lib/data-queries";
-import ExercisesTable from "@/app/ui/gym-app/main-exercises/table";
 import ExerciseCard from "@/app/ui/gym-app/main-exercises/exc-card";
 import Search from "@/app/ui/search";
 

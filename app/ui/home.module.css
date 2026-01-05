@@ -9,3 +9,14 @@
 .randomText {
   color: chocolate;
 }
+
+.card {
+  /* rounded-md bg-gray-50 p-2 mt-2 flex flex-row justify-between */
+  border-radius: 8px;
+  background-color: #f9fafb;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}

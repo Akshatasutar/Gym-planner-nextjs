@@ -9,6 +9,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { formatDateToLocal, NULL_PLACEHOLDER } from "@/app/lib/utils";
+import styles from "@/app/ui/home.module.css";
 
 export default function ExerciseCard({
   exercise,
@@ -18,7 +19,7 @@ export default function ExerciseCard({
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <div className="rounded-md bg-gray-50 p-2 mt-2 flex flex-row justify-between">
+    <div className={styles.card}>
       <div className="mr-2 w-full">
         <p>{exercise.name}</p>
         <div className="flex flex-row flex-wrap">
@@ -32,9 +33,7 @@ export default function ExerciseCard({
           <div className="mt-4 text-sm text-grey-400 p-2">
             <p>
               PR{" : "}
-              <b>
-                <i>{exercise.current_pr}kg</i>
-              </b>
+              <b className="text-base">{exercise.current_pr}kg</b>
               <button className="active:bg-gray-200">
                 <PencilIcon className="h-4 w-4 text-gray-400 justify-end mr-1 active:outline-purple-600 ml-3 p-0" />
               </button>
