@@ -111,5 +111,17 @@ export type MainExercisesTableType = {
   date_of_pr?: string;
   last_performed?: string;
 };
+
 // Current rotation list
+export type TodaysExercise = {
+  id: string;
+  name: string;
+  // target_muscles: string[];
+  current_pr?: number;
+  date_of_pr?: string;
+  // last_performed?: string;
+  sets: number;
+  is_completed: boolean;
+};
+
 // Today's exercise list
