@@ -8,8 +8,10 @@ import {
   InvoicesTable,
   LatestInvoiceRaw,
   Revenue,
+  TodaysExercise,
 } from "./definitions";
 import { formatCurrency } from "./utils";
+import { cacheTag } from "next/cache";
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: "require" });
 
@@ -244,6 +246,8 @@ export async function fetchAllExercises() {
 }
 
 export async function fetchFilteredExercises(query: string) {
+  "use cache";
+  cacheTag("fetch-exercises");
   try {
     const exercisesData = await sql<Exercise[]>`
       SELECT 
@@ -252,6 +256,7 @@ export async function fetchFilteredExercises(query: string) {
         current_pr,
         date_of_pr,
         last_performed,
+        is_added_to_today,
         array_agg(muscle_groups.name) AS target_muscles
       FROM exercises
         LEFT JOIN muscles_exercises_map ON exercises.id = muscles_exercises_map.exrcise_id
@@ -264,5 +269,17 @@ export async function fetchFilteredExercises(query: string) {
   } catch (error) {
     console.error("Eror fetching data from database: ", error);
     throw new Error("Failed to fetch filtered exercise data.");
+  }
+}
+
+export async function fetchTodaysExercises() {
+  try {
+    const todaysExercisesData = await sql<TodaysExercise[]>`
+      SELECT * FROM todays_exercises`;
+
+    return todaysExercisesData;
+  } catch (error) {
+    console.error("Eror fetching data from database: ", error);
+    throw new Error("Failed to fetch todays exercises data.");
   }
 }

@@ -8,6 +8,7 @@ import {
 import { formatDateToLocal, NULL_PLACEHOLDER } from "@/app/lib/utils";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
+import styles from "@/app/ui/home.module.css";
 
 export default function TodaysExerciseCard({
   exercise,
@@ -15,7 +16,7 @@ export default function TodaysExerciseCard({
   exercise: TodaysExercise;
 }) {
   const [statusArray, setStatusArray] = useState<Array<boolean>>(
-    new Array<boolean>(exercise.sets).fill(false)
+    new Array<boolean>(exercise.total_sets).fill(false)
   );
   const [isAllSetsCompleted, setIsAllSetsCompleted] = useState<boolean>(
     false
@@ -29,18 +30,18 @@ export default function TodaysExerciseCard({
 
   return (
     <div
-      className={clsx(
-        "rounded-md bg-gray-50 p-2 mt-2 flex flex-row justify-between",
-        { "bg-green-100": isAllSetsCompleted }
-      )}
+      className={clsx(styles.card, "bg-gray-50", {
+        "bg-green-100": isAllSetsCompleted,
+      })}
     >
       <div className="mr-2 w-full">
         <p>
-          <strong>{exercise.name}</strong>
+          <strong>{exercise.exercise_name}</strong>
         </p>
         <div className="flex flex-row ml-0 p-1">
           {statusArray.map((isDone, i) => (
             <button
+              key={i}
               onClick={() =>
                 setStatusArray(
                   statusArray.map((oldItem, idx) => (idx == i ? true : oldItem))
@@ -50,7 +51,7 @@ export default function TodaysExerciseCard({
               <CheckCircleIcon
                 className={clsx(
                   "h-8 w-8 text-gray-400 justify-end mr-1 active:outline-purple-600 ml-3 p-0 rounded-full",
-                  { "bg-purple-700 text-gray-50": isDone }
+                  { "bg-green-700 text-gray-50": isDone }
                 )}
                 key={i}
               />
@@ -60,7 +61,7 @@ export default function TodaysExerciseCard({
         <div className=" text-sm text-grey-400 p-2">
           <p>
             PR{" : "}
-            <b className="text-base">{exercise.current_pr}kg</b>
+            <b className="text-base">{exercise.pr}kg</b>
             <button className="active:bg-gray-200">
               <PencilIcon className="h-4 w-4 text-gray-400 justify-end mr-1 active:outline-purple-600 ml-3 p-0" />
             </button>

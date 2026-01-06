@@ -2,6 +2,8 @@ import { lusitana } from "../../ui/fonts";
 import { fetchFilteredExercises } from "@/app/lib/data-queries";
 import ExerciseCard from "@/app/ui/gym-app/main-exercises/exc-card";
 import Search from "@/app/ui/search";
+import { CardSkeleton } from "@/app/ui/skeletons";
+import { Suspense } from "react";
 
 export default async function Page({
   searchParams,
@@ -30,7 +32,11 @@ export default async function Page({
       </div>
       <div>
         {fiteredExercisesList.map((exercise) => {
-          return <ExerciseCard key={exercise.id} exercise={exercise} />;
+          return (
+            <Suspense key={exercise.id} fallback={<CardSkeleton />}>
+              <ExerciseCard key={exercise.id} exercise={exercise} />
+            </Suspense>
+          );
         })}
       </div>
     </main>

@@ -100,6 +100,7 @@ export type Exercise = {
   current_pr?: number;
   date_of_pr?: string;
   last_performed?: string;
+  is_added_to_today: boolean;
 };
 
 // Main exercise list (all),
@@ -115,12 +116,13 @@ export type MainExercisesTableType = {
 // Current rotation list
 export type TodaysExercise = {
   id: string;
-  name: string;
+  exercise_name: string;
   // target_muscles: string[];
-  current_pr?: number;
+  pr?: number;
   date_of_pr?: string;
   // last_performed?: string;
-  sets: number;
+  total_sets: number;
+  finished_sets: number;
   is_completed: boolean;
 };
 

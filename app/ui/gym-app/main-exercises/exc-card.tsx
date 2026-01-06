@@ -7,9 +7,11 @@ import {
   ChevronUpIcon,
   PencilIcon,
 } from "@heroicons/react/24/outline";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { formatDateToLocal, NULL_PLACEHOLDER } from "@/app/lib/utils";
 import styles from "@/app/ui/home.module.css";
+import { addExerciseToTodaysList } from "@/app/lib/data-commands";
+import clsx from "clsx";
 
 export default function ExerciseCard({
   exercise,
@@ -17,9 +19,17 @@ export default function ExerciseCard({
   exercise: Exercise; // MainExercisesTableType[];
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isAddedToToday, setIsAddedToToday] = useState(
+    exercise.is_added_to_today
+  );
+
+  const handleAddToTodayButtonClick = async () => {
+    await addExerciseToTodaysList(exercise);
+    setIsAddedToToday(true);
+  };
 
   return (
-    <div className={styles.card}>
+    <div className={clsx(styles.card, "bg-gray-50")}>
       <div className="mr-2 w-full">
         <p>{exercise.name}</p>
         <div className="flex flex-row flex-wrap">
@@ -53,7 +63,17 @@ export default function ExerciseCard({
           </div>
         )}
 
-        <Button className="w-full p-1 bg-zinc-500 m-1"> Add to today</Button>
+        <Button
+          className={clsx(
+            "w-full p-1 m-1",
+            { "bg-zinc-600": !isAddedToToday },
+            { "bg-green-700": isAddedToToday }
+          )}
+          onClick={handleAddToTodayButtonClick}
+          disabled={isAddedToToday}
+        >
+          {isAddedToToday ? "Added to today" : "Add to today"}
+        </Button>
       </div>
       <button
         className="text-sm active:bg-gray-200"
