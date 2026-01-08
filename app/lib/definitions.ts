@@ -117,6 +117,7 @@ export type MainExercisesTableType = {
 export type TodaysExercise = {
   id: string;
   exercise_name: string;
+  main_exercise_id: string;
   // target_muscles: string[];
   pr?: number;
   date_of_pr?: string;

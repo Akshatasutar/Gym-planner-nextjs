@@ -1,9 +1,9 @@
 "use server";
-
+// This has all "commands" - create, update and delete operations.
 import postgres from "postgres";
 import { z } from "zod";
 import { Exercise } from "./definitions";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { refresh, revalidatePath, revalidateTag } from "next/cache";
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: "require" });
 
@@ -71,10 +71,15 @@ export async function addExerciseToTodaysList(exercise: Exercise) {
   const dateOfPr = exercise.date_of_pr ? new Date(exercise.date_of_pr) : null;
   try {
     await sql`
-   INSERT INTO todays_exercises (exercise_name, pr, date_of_pr, is_completed, total_sets, finished_sets)
-      VALUES (${exercise.name}, ${
-      exercise.current_pr || 0
-    }, ${dateOfPr}, false, 3, 0)
+   INSERT INTO todays_exercises (exercise_name, pr, date_of_pr, is_completed, total_sets, finished_sets, main_exercise_id)
+      VALUES (${exercise.name}, 
+      ${exercise.current_pr || 0}, 
+      ${dateOfPr}, 
+      false, 
+      3, 
+      0,
+      ${exercise.id}
+      )
   `;
   } catch (error) {
     console.error("Database Error:", error);
@@ -95,15 +100,37 @@ export async function deleteAllTodaysExercises() {
     await sql`
     DELETE FROM todays_exercises
   `;
+    // Update all columns in main exercises
+    updateAllIsAddedFalse();
   } catch (error) {
     console.error("Database Error:", error);
     throw new Error("Failed to delete all today's exercises.");
   }
 
-  // Update all columns in main exercises
-  updateAllIsAddedFalse();
-
   // Update UI
   revalidatePath("/all-views/main-exercises");
+  revalidateTag("fetch-exercises", "max");
+}
+
+export async function deleteTodaysExerciseWithId(
+  exerciseId: string,
+  mainExerciseId: string
+) {
+  try {
+    await sql`
+    DELETE FROM todays_exercises
+    WHERE id = ${exerciseId}
+  `;
+    // Update "is added" column in main exercises
+    updateIsAddedForMainExerciseFalse(mainExerciseId);
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error(
+      "Failed to delete today's exercise with id" + `${exerciseId}`
+    );
+  }
+
+  // Update UI
+  revalidatePath("/all-views/main-exercises/[slug]", "page");
   revalidateTag("fetch-exercises", "max");
 }

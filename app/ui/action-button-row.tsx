@@ -1,6 +1,6 @@
 "use client";
 import { redirect } from "next/navigation";
-import { deleteAllTodaysExercises } from "../lib/data-commands";
+import { deleteAllTodaysExercises } from "../lib/actions";
 import { Button } from "./button";
 
 export function ActionButtonRow() {

@@ -10,7 +10,7 @@ import {
 import { useMemo, useState } from "react";
 import { formatDateToLocal, NULL_PLACEHOLDER } from "@/app/lib/utils";
 import styles from "@/app/ui/home.module.css";
-import { addExerciseToTodaysList } from "@/app/lib/data-commands";
+import { addExerciseToTodaysList } from "@/app/lib/actions";
 import clsx from "clsx";
 
 export default function ExerciseCard({

@@ -1,20 +1,12 @@
-import { deleteAllTodaysExercises } from "@/app/lib/data-commands";
 import { fetchTodaysExercises } from "@/app/lib/data-queries";
 import { ActionButtonRow } from "@/app/ui/action-button-row";
-import { Button } from "@/app/ui/button";
 import TodaysExerciseCard from "@/app/ui/gym-app/todays-exercises/todays-exc-card";
+import { CardSkeleton } from "@/app/ui/skeletons";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 
 export default async function Page() {
   const todaysExercises = await fetchTodaysExercises();
-
-  // const handleAddButtonClick = () => {
-  //   redirect("/all-views/main-exercises");
-  // };
-
-  // const handleDeleteAllButtonClick = async () => {
-  //   await deleteAllTodaysExercises();
-  // };
 
   return (
     <main>
@@ -23,25 +15,13 @@ export default async function Page() {
       </h1>
       <p> Here is today's workout plan</p>
       <div className="flex flex-row gap-2">
-        {/* <ActionButtonRow />
-         */}
-        <Button
-          className="w-1/2 p-1 bg-zinc-600 m-1"
-          // onClick={handleAddButtonClick}
-        >
-          Add
-        </Button>
-        <Button
-          className="w-1/2 p-1 bg-red-700 m-1"
-          disabled={todaysExercises.length == 0}
-          onClick={deleteAllTodaysExercises}
-        >
-          Remove all
-        </Button>
+        <ActionButtonRow />
       </div>
       <div>
         {todaysExercises.map((exercise) => (
-          <TodaysExerciseCard key={exercise.id} exercise={exercise} />
+          <Suspense key={exercise.id} fallback={<CardSkeleton />}>
+            <TodaysExerciseCard key={exercise.id} exercise={exercise} />
+          </Suspense>
         ))}
       </div>
     </main>
