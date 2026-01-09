@@ -8,25 +8,25 @@ export function ActionButtonRow() {
     redirect("/all-views/main-exercises");
   };
 
-  const handleDeleteAllButtonClick = async () => {
-    await deleteAllTodaysExercises();
-  };
-
   return (
-    <>
+    <form
+      className="w-full flex flex-row gap-1"
+      action={deleteAllTodaysExercises}
+    >
       <Button
         className="w-1/2 p-1 bg-zinc-600 m-1"
         onClick={handleAddButtonClick}
       >
         Add
       </Button>
+
       <Button
+        type="submit"
         className="w-1/2 p-1 bg-red-700 m-1"
         // disabled={todaysExercises.length == 0}
-        onClick={() => handleDeleteAllButtonClick()}
       >
         Remove all
       </Button>
-    </>
+    </form>
   );
 }

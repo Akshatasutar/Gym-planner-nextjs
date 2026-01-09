@@ -9,6 +9,8 @@ import { formatDateToLocal, NULL_PLACEHOLDER } from "@/app/lib/utils";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
 import styles from "@/app/ui/home.module.css";
+import { deleteTodaysExerciseWithId } from "@/app/lib/actions";
+import EditPrInput from "../../edit-pr-input";
 
 export default function TodaysExerciseCard({
   exercise,
@@ -22,6 +24,11 @@ export default function TodaysExerciseCard({
     false
     // exercise.is_completed
   );
+  const [showEditPrInput, setShowEditPrInput] = useState(false);
+
+  const handleDeleteIndividual = async () => {
+    await deleteTodaysExerciseWithId(exercise.id, exercise.main_exercise_id);
+  };
 
   useEffect(() => {
     if (statusArray.every((isSetDone) => isSetDone))
@@ -59,13 +66,28 @@ export default function TodaysExerciseCard({
           ))}
         </div>
         <div className=" text-sm text-grey-400 p-2">
-          <p>
+          <div>
             PR{" : "}
-            <b className="text-base">{exercise.pr}kg</b>
-            <button className="active:bg-gray-200">
-              <PencilIcon className="h-4 w-4 text-gray-400 justify-end mr-1 active:outline-purple-600 ml-3 p-0" />
-            </button>
-          </p>
+            {showEditPrInput ? (
+              <EditPrInput
+                oldPr={exercise.pr ?? 0}
+                setShowInput={setShowEditPrInput}
+                todaysExerciseId={exercise.id}
+                mainExerciseId={exercise.main_exercise_id}
+              />
+            ) : (
+              <>
+                <b className="text-base">{exercise.pr}kg</b>
+
+                <button
+                  className="active:bg-gray-200"
+                  onClick={() => setShowEditPrInput(true)}
+                >
+                  <PencilIcon className="h-4 w-4 text-gray-400 justify-end mr-1 active:outline-purple-600 ml-3 p-0" />
+                </button>
+              </>
+            )}
+          </div>
           <p>{`on ${
             exercise.date_of_pr
               ? formatDateToLocal(exercise.date_of_pr) + "!"
@@ -75,7 +97,7 @@ export default function TodaysExerciseCard({
       </div>
       <button
         className="flex items-center rounded-lg bg-red-700 p-3 text-sm h-6 w-10 active:bg-red-300 disabled:bg-gray-400"
-        onClick={() => {}}
+        onClick={() => handleDeleteIndividual()}
         disabled={isAllSetsCompleted}
       >
         <TrashIcon className="h-5 w-5 text-gray-50 active:outline-purple-600" />

@@ -15,27 +15,38 @@ const NewExerciseFormSchema = z.object({
   muscleGroups: z.string(),
 });
 
-export async function addNewExercise(formdata: FormData) {
-  //TODO: Get data from form data
-  const { exerciseName, muscleGroups } = NewExerciseFormSchema.parse({
-    exerciseName: formdata.get("exerciseName"),
-    muscleGroups: formdata.get("mucleGroups"), // Change this to array later
-  });
-  // TODO: Insert row in exercises table
-  await sql`
-    INSERT INTO exercises (id, name)
-      VALUES (${exerciseName})
-  `;
-  // Correct the above sql - it is just a placeholder
-}
+const NewPrFormSchema = z.object({
+  todaysExerciseId: z.string(),
+  mainExerciseId: z.string(),
+  newPr: z.coerce.number(),
+  date: z.string(),
+});
+const UpdatePrFromForm = NewPrFormSchema.omit({ date: true });
+
+// export async function addNewExercise(formdata: FormData) {
+//   //TODO: Get data from form data
+//   const { exerciseName, muscleGroups } = NewExerciseFormSchema.parse({
+//     exerciseName: formdata.get("exerciseName"),
+//     muscleGroups: formdata.get("mucleGroups"), // Change this to array later
+//   });
+//   // TODO: Insert row in exercises table
+//   await sql`
+//     INSERT INTO exercises (id, name)
+//       VALUES (${exerciseName})
+//   `;
+//   // Correct the above sql - it is just a placeholder
+// }
 
 async function updateIsAddedForMainExerciseTrue(mainExerciseId: string) {
+  const todaysDate = new Date().toISOString().split("T")[0];
   try {
     await sql`
     UPDATE exercises
-      SET is_added_to_today = true
+      SET is_added_to_today = true,
+      last_performed = ${todaysDate}
       WHERE id = ${mainExerciseId}
   `;
+    // TODO: Also change last_performed
   } catch (error) {
     console.error("Database Error:", error);
     throw new Error("Failed to update isAdded data.");
@@ -71,15 +82,15 @@ export async function addExerciseToTodaysList(exercise: Exercise) {
   const dateOfPr = exercise.date_of_pr ? new Date(exercise.date_of_pr) : null;
   try {
     await sql`
-   INSERT INTO todays_exercises (exercise_name, pr, date_of_pr, is_completed, total_sets, finished_sets, main_exercise_id)
-      VALUES (${exercise.name}, 
-      ${exercise.current_pr || 0}, 
-      ${dateOfPr}, 
-      false, 
-      3, 
-      0,
-      ${exercise.id}
-      )
+    INSERT INTO todays_exercises (exercise_name, pr, date_of_pr, is_completed, total_sets, finished_sets, main_exercise_id)
+        VALUES (${exercise.name}, 
+        ${exercise.current_pr || 0}, 
+        ${dateOfPr}, 
+        false, 
+        3, 
+        0,
+        ${exercise.id}
+        )
   `;
   } catch (error) {
     console.error("Database Error:", error);
@@ -131,6 +142,53 @@ export async function deleteTodaysExerciseWithId(
   }
 
   // Update UI
-  revalidatePath("/all-views/main-exercises/[slug]", "page");
+  revalidatePath("/all-views/main-exercises", "page");
+  revalidateTag("fetch-exercises", "max");
+}
+
+export async function updatePRMainList(mainExerciseId: string, newPr: number) {
+  const todaysDate = new Date().toISOString().split("T")[0];
+  try {
+    await sql`
+    UPDATE exercises
+    SET
+      current_pr = ${newPr},
+      date_of_pr = ${todaysDate}
+    FROM todays_exercises
+      WHERE exercises.id = ${mainExerciseId}
+    `;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to update PR for " + `${mainExerciseId}`);
+  }
+
+  // Update UI
+  revalidateTag("fetch-exercises", "max");
+}
+
+export async function updatePRToday(
+  todaysExerciseId: string,
+  mainExerciseId: string,
+  newPr: number
+) {
+  try {
+    const todaysDate = new Date().toISOString().split("T")[0];
+    console.log(`New PR: ${newPr} created on ${todaysDate} (today)`);
+
+    await sql`
+    UPDATE todays_exercises
+    SET 
+      pr = ${newPr},
+      date_of_pr = ${todaysDate}
+    WHERE id = ${todaysExerciseId}
+    `;
+    updatePRMainList(mainExerciseId, newPr);
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to update today's PR for " + `${todaysExerciseId}`);
+  }
+
+  // Update UI
+  refresh();
   revalidateTag("fetch-exercises", "max");
 }
