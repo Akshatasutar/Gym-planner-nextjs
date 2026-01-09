@@ -275,7 +275,15 @@ export async function fetchFilteredExercises(query: string) {
 export async function fetchTodaysExercises() {
   try {
     const todaysExercisesData = await sql<TodaysExercise[]>`
-      SELECT * FROM todays_exercises`;
+      SELECT 
+        tex.id as id,
+        main_exercise_id,
+        mex.name as exercise_name,
+        mex.current_pr as pr,
+        mex.date_of_pr as date_of_pr,
+        tex.total_sets
+        FROM todays_exercises tex JOIN exercises mex
+          ON tex.main_exercise_id = mex.id`;
 
     return todaysExercisesData;
   } catch (error) {

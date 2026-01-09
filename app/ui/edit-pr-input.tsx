@@ -2,25 +2,25 @@
 
 import { useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
-import { updatePRToday } from "../lib/actions";
+import { updatePR } from "../lib/actions";
 
 export default function EditPrInput({
-  todaysExerciseId,
+  // todaysExerciseId,
   mainExerciseId,
   oldPr,
   setShowInput,
 }: {
-  todaysExerciseId?: string;
+  // todaysExerciseId?: string;
   mainExerciseId: string;
   oldPr: number;
   setShowInput: (show: boolean) => void;
 }) {
   const [prInputValue, setPrInputValue] = useState<number>(oldPr);
-  const updatePrWithId = updatePRToday.bind(
+  const updatePrWithId = updatePR.bind(
     null,
-    todaysExerciseId ?? "",
+    // todaysExerciseId ?? "",
     mainExerciseId,
-    prInputValue ?? "0"
+    prInputValue ?? 0
   );
 
   const handlePrChange = useDebouncedCallback((input) => {

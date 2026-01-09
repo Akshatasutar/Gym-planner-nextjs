@@ -12,6 +12,7 @@ import { formatDateToLocal, NULL_PLACEHOLDER } from "@/app/lib/utils";
 import styles from "@/app/ui/home.module.css";
 import { addExerciseToTodaysList } from "@/app/lib/actions";
 import clsx from "clsx";
+import EditPrInput from "../../edit-pr-input";
 
 export default function ExerciseCard({
   exercise,
@@ -22,6 +23,7 @@ export default function ExerciseCard({
   const [isAddedToToday, setIsAddedToToday] = useState(
     exercise.is_added_to_today
   );
+  const [showEditPrInput, setShowEditPrInput] = useState(false);
 
   const handleAddToTodayButtonClick = async () => {
     await addExerciseToTodaysList(exercise);
@@ -41,13 +43,26 @@ export default function ExerciseCard({
         {/* Details */}
         {isExpanded && (
           <div className="mt-4 text-sm text-grey-400 p-2">
-            <p>
+            <div>
               PR{" : "}
-              <b className="text-base">{exercise.current_pr}kg</b>
-              <button className="active:bg-gray-200">
-                <PencilIcon className="h-4 w-4 text-gray-400 justify-end mr-1 active:outline-purple-600 ml-3 p-0" />
-              </button>
-            </p>
+              {showEditPrInput ? (
+                <EditPrInput
+                  oldPr={exercise.current_pr ?? 0}
+                  setShowInput={setShowEditPrInput}
+                  mainExerciseId={exercise.id}
+                />
+              ) : (
+                <>
+                  <b className="text-base">{exercise.current_pr}kg</b>
+                  <button
+                    className="active:bg-gray-200"
+                    onClick={() => setShowEditPrInput(true)}
+                  >
+                    <PencilIcon className="h-4 w-4 text-gray-400 justify-end mr-1 active:outline-purple-600 ml-3 p-0" />
+                  </button>
+                </>
+              )}
+            </div>
             <p>{`on ${
               exercise.date_of_pr
                 ? formatDateToLocal(exercise.date_of_pr) + "!"
@@ -63,17 +78,19 @@ export default function ExerciseCard({
           </div>
         )}
 
-        <Button
-          className={clsx(
-            "w-full p-1 m-1",
-            { "bg-zinc-600": !isAddedToToday },
-            { "bg-green-700": isAddedToToday }
-          )}
-          onClick={handleAddToTodayButtonClick}
-          disabled={isAddedToToday}
-        >
-          {isAddedToToday ? "Added to today" : "Add to today"}
-        </Button>
+        <form action={handleAddToTodayButtonClick}>
+          <Button
+            type="submit"
+            className={clsx(
+              "w-full p-1 m-1",
+              { "bg-zinc-600": !isAddedToToday },
+              { "bg-green-700": isAddedToToday }
+            )}
+            disabled={isAddedToToday}
+          >
+            {isAddedToToday ? "Added to today" : "Add to today"}
+          </Button>
+        </form>
       </div>
       <button
         className="text-sm active:bg-gray-200"

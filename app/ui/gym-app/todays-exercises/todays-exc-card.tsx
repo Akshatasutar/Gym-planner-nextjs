@@ -26,9 +26,14 @@ export default function TodaysExerciseCard({
   );
   const [showEditPrInput, setShowEditPrInput] = useState(false);
 
-  const handleDeleteIndividual = async () => {
-    await deleteTodaysExerciseWithId(exercise.id, exercise.main_exercise_id);
-  };
+  // const handleDeleteIndividual = async () => {
+  //   await deleteTodaysExerciseWithId(exercise.id, exercise.main_exercise_id);
+  // };
+  const handleDeleteIndividual = deleteTodaysExerciseWithId.bind(
+    null,
+    exercise.id,
+    exercise.main_exercise_id
+  );
 
   useEffect(() => {
     if (statusArray.every((isSetDone) => isSetDone))
@@ -72,7 +77,7 @@ export default function TodaysExerciseCard({
               <EditPrInput
                 oldPr={exercise.pr ?? 0}
                 setShowInput={setShowEditPrInput}
-                todaysExerciseId={exercise.id}
+                // todaysExerciseId={exercise.id}
                 mainExerciseId={exercise.main_exercise_id}
               />
             ) : (
@@ -95,13 +100,16 @@ export default function TodaysExerciseCard({
           }`}</p>
         </div>
       </div>
-      <button
-        className="flex items-center rounded-lg bg-red-700 p-3 text-sm h-6 w-10 active:bg-red-300 disabled:bg-gray-400"
-        onClick={() => handleDeleteIndividual()}
-        disabled={isAllSetsCompleted}
-      >
-        <TrashIcon className="h-5 w-5 text-gray-50 active:outline-purple-600" />
-      </button>
+      <form action={handleDeleteIndividual}>
+        <button
+          type="submit"
+          className="flex items-center rounded-lg bg-red-700 p-3 text-sm h-6 w-10 active:bg-red-300 disabled:bg-gray-400"
+          // onClick={() => handleDeleteIndividual()}
+          disabled={isAllSetsCompleted}
+        >
+          <TrashIcon className="h-5 w-5 text-gray-50 active:outline-purple-600" />
+        </button>
+      </form>
     </div>
   );
 }

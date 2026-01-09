@@ -82,13 +82,9 @@ export async function addExerciseToTodaysList(exercise: Exercise) {
   const dateOfPr = exercise.date_of_pr ? new Date(exercise.date_of_pr) : null;
   try {
     await sql`
-    INSERT INTO todays_exercises (exercise_name, pr, date_of_pr, is_completed, total_sets, finished_sets, main_exercise_id)
-        VALUES (${exercise.name}, 
-        ${exercise.current_pr || 0}, 
-        ${dateOfPr}, 
-        false, 
+    INSERT INTO todays_exercises (exercise_name, total_sets, main_exercise_id)
+        VALUES (${exercise.name},
         3, 
-        0,
         ${exercise.id}
         )
   `;
@@ -142,50 +138,23 @@ export async function deleteTodaysExerciseWithId(
   }
 
   // Update UI
-  revalidatePath("/all-views/main-exercises", "page");
+  // revalidatePath("/all-views/main-exercises");
   revalidateTag("fetch-exercises", "max");
 }
 
-export async function updatePRMainList(mainExerciseId: string, newPr: number) {
-  const todaysDate = new Date().toISOString().split("T")[0];
+export async function updatePR(mainExerciseId: string, newPr: number) {
   try {
+    const todaysDate = new Date().toISOString().split("T")[0];
     await sql`
     UPDATE exercises
     SET
       current_pr = ${newPr},
       date_of_pr = ${todaysDate}
-    FROM todays_exercises
-      WHERE exercises.id = ${mainExerciseId}
+    WHERE id = ${mainExerciseId}
     `;
   } catch (error) {
     console.error("Database Error:", error);
-    throw new Error("Failed to update PR for " + `${mainExerciseId}`);
-  }
-
-  // Update UI
-  revalidateTag("fetch-exercises", "max");
-}
-
-export async function updatePRToday(
-  todaysExerciseId: string,
-  mainExerciseId: string,
-  newPr: number
-) {
-  try {
-    const todaysDate = new Date().toISOString().split("T")[0];
-    console.log(`New PR: ${newPr} created on ${todaysDate} (today)`);
-
-    await sql`
-    UPDATE todays_exercises
-    SET 
-      pr = ${newPr},
-      date_of_pr = ${todaysDate}
-    WHERE id = ${todaysExerciseId}
-    `;
-    updatePRMainList(mainExerciseId, newPr);
-  } catch (error) {
-    console.error("Database Error:", error);
-    throw new Error("Failed to update today's PR for " + `${todaysExerciseId}`);
+    throw new Error("Failed to update today's PR for " + `${mainExerciseId}`);
   }
 
   // Update UI
