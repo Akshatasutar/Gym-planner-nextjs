@@ -26,9 +26,6 @@ export default function TodaysExerciseCard({
   );
   const [showEditPrInput, setShowEditPrInput] = useState(false);
 
-  // const handleDeleteIndividual = async () => {
-  //   await deleteTodaysExerciseWithId(exercise.id, exercise.main_exercise_id);
-  // };
   const handleDeleteIndividual = deleteTodaysExerciseWithId.bind(
     null,
     exercise.id,
@@ -77,12 +74,13 @@ export default function TodaysExerciseCard({
               <EditPrInput
                 oldPr={exercise.pr ?? 0}
                 setShowInput={setShowEditPrInput}
-                // todaysExerciseId={exercise.id}
                 mainExerciseId={exercise.main_exercise_id}
               />
             ) : (
               <>
-                <b className="text-base">{exercise.pr}kg</b>
+                <b className="text-base">
+                  {exercise.pr} {exercise.is_reps ? "reps" : "kg"}
+                </b>
 
                 <button
                   className="active:bg-gray-200"

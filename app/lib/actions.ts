@@ -79,7 +79,6 @@ async function updateAllIsAddedFalse() {
 }
 
 export async function addExerciseToTodaysList(exercise: Exercise) {
-  const dateOfPr = exercise.date_of_pr ? new Date(exercise.date_of_pr) : null;
   try {
     await sql`
     INSERT INTO todays_exercises (exercise_name, total_sets, main_exercise_id)
@@ -116,7 +115,6 @@ export async function deleteAllTodaysExercises() {
 
   // Update UI
   revalidatePath("/all-views/main-exercises");
-  revalidateTag("fetch-exercises", "max");
 }
 
 export async function deleteTodaysExerciseWithId(
@@ -138,8 +136,7 @@ export async function deleteTodaysExerciseWithId(
   }
 
   // Update UI
-  // revalidatePath("/all-views/main-exercises");
-  revalidateTag("fetch-exercises", "max");
+  revalidatePath("/all-views/main-exercises");
 }
 
 export async function updatePR(mainExerciseId: string, newPr: number) {
@@ -158,6 +155,5 @@ export async function updatePR(mainExerciseId: string, newPr: number) {
   }
 
   // Update UI
-  refresh();
-  revalidateTag("fetch-exercises", "max");
+  revalidatePath("/all-views/main-exercises");
 }

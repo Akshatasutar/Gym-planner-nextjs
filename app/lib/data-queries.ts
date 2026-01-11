@@ -222,32 +222,7 @@ export async function fetchFilteredCustomers(query: string) {
   }
 }
 
-export async function fetchAllExercises() {
-  try {
-    const exercisesData = await sql<Exercise[]>`
-      SELECT 
-        exercises.id,
-        exercises.name AS name,
-        current_pr,
-        date_of_pr,
-        last_performed,
-        array_agg(muscle_groups.name) AS target_muscles
-      FROM exercises
-        LEFT JOIN muscles_exercises_map ON exercises.id = muscles_exercises_map.exrcise_id
-        LEFT JOIN muscle_groups ON muscles_exercises_map.muscle_group_id = muscle_groups.id
-      GROUP BY exercises.id
-      ORDER BY last_performed desc nulls last`;
-
-    return exercisesData;
-  } catch (error) {
-    console.error("Eror fetching data from database: ", error);
-    throw new Error("Failed to fetch exercise data.");
-  }
-}
-
 export async function fetchFilteredExercises(query: string) {
-  "use cache";
-  cacheTag("fetch-exercises");
   try {
     const exercisesData = await sql<Exercise[]>`
       SELECT 
@@ -257,6 +232,7 @@ export async function fetchFilteredExercises(query: string) {
         date_of_pr,
         last_performed,
         is_added_to_today,
+        is_reps,
         array_agg(muscle_groups.name) AS target_muscles
       FROM exercises
         LEFT JOIN muscles_exercises_map ON exercises.id = muscles_exercises_map.exrcise_id
@@ -280,6 +256,7 @@ export async function fetchTodaysExercises() {
         main_exercise_id,
         mex.name as exercise_name,
         mex.current_pr as pr,
+        mex.is_reps,
         mex.date_of_pr as date_of_pr,
         tex.total_sets
         FROM todays_exercises tex JOIN exercises mex

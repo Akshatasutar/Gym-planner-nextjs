@@ -14,20 +14,13 @@ import { addExerciseToTodaysList } from "@/app/lib/actions";
 import clsx from "clsx";
 import EditPrInput from "../../edit-pr-input";
 
-export default function ExerciseCard({
-  exercise,
-}: {
-  exercise: Exercise; // MainExercisesTableType[];
-}) {
+export default function ExerciseCard({ exercise }: { exercise: Exercise }) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [isAddedToToday, setIsAddedToToday] = useState(
-    exercise.is_added_to_today
-  );
   const [showEditPrInput, setShowEditPrInput] = useState(false);
+  const isAddedToToday = useMemo(() => exercise.is_added_to_today, [exercise]);
 
   const handleAddToTodayButtonClick = async () => {
     await addExerciseToTodaysList(exercise);
-    setIsAddedToToday(true);
   };
 
   return (
@@ -53,7 +46,9 @@ export default function ExerciseCard({
                 />
               ) : (
                 <>
-                  <b className="text-base">{exercise.current_pr}kg</b>
+                  <b className="text-base">
+                    {exercise.current_pr} {exercise.is_reps ? "reps" : "kg"}
+                  </b>
                   <button
                     className="active:bg-gray-200"
                     onClick={() => setShowEditPrInput(true)}

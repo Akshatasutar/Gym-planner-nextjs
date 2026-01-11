@@ -101,6 +101,7 @@ export type Exercise = {
   date_of_pr?: string;
   last_performed?: string;
   is_added_to_today: boolean;
+  is_reps: boolean;
 };
 
 // Main exercise list (all),
@@ -120,6 +121,7 @@ export type TodaysExercise = {
   main_exercise_id: string;
   // target_muscles: string[];
   pr?: number;
+  is_reps: boolean;
   date_of_pr?: string;
   // last_performed?: string;
   total_sets: number;
