@@ -1,9 +1,6 @@
 import { fetchTodaysExercises } from "@/app/lib/data-queries";
 import { ActionButtonRow } from "@/app/ui/action-button-row";
-import TodaysExerciseCard from "@/app/ui/gym-app/todays-exercises/todays-exc-card";
-import { CardSkeleton } from "@/app/ui/skeletons";
-import { redirect } from "next/navigation";
-import { Suspense } from "react";
+import TodaysExercisesCardList from "@/app/ui/gym-app/todays-exercises/todays-list";
 
 export default async function Page() {
   const todaysExercises = await fetchTodaysExercises();
@@ -14,16 +11,11 @@ export default async function Page() {
         Today's Exercises
       </h1>
       <p> Here is today's workout plan</p>
-      <div className="flex flex-row gap-2">
-        <ActionButtonRow />
-      </div>
-      <div>
-        {todaysExercises.map((exercise) => (
-          <Suspense key={exercise.id} fallback={<CardSkeleton />}>
-            <TodaysExerciseCard key={exercise.id} exercise={exercise} />
-          </Suspense>
-        ))}
-      </div>
+      <ActionButtonRow />
+      <TodaysExercisesCardList
+        todaysExercises={todaysExercises}
+        key={todaysExercises.length}
+      />
     </main>
   );
 }

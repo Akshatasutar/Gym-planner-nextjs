@@ -6,6 +6,7 @@ import { Exercise } from "./definitions";
 import { refresh, revalidatePath, revalidateTag } from "next/cache";
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: "require" });
+const todaysDate = new Date().toISOString().split("T")[0];
 
 // Validate form data using ZOD - typechecking, before saving to database
 const NewExerciseFormSchema = z.object({
@@ -23,30 +24,26 @@ const NewPrFormSchema = z.object({
 });
 const UpdatePrFromForm = NewPrFormSchema.omit({ date: true });
 
-// export async function addNewExercise(formdata: FormData) {
-//   //TODO: Get data from form data
-//   const { exerciseName, muscleGroups } = NewExerciseFormSchema.parse({
-//     exerciseName: formdata.get("exerciseName"),
-//     muscleGroups: formdata.get("mucleGroups"), // Change this to array later
-//   });
-//   // TODO: Insert row in exercises table
-//   await sql`
-//     INSERT INTO exercises (id, name)
-//       VALUES (${exerciseName})
-//   `;
-//   // Correct the above sql - it is just a placeholder
-// }
-
-async function updateIsAddedForMainExerciseTrue(mainExerciseId: string) {
-  const todaysDate = new Date().toISOString().split("T")[0];
+export async function updateLastPerformedDate(mainExerciseId: string) {
   try {
     await sql`
     UPDATE exercises
-      SET is_added_to_today = true,
-      last_performed = ${todaysDate}
+      SET last_performed = ${todaysDate}
       WHERE id = ${mainExerciseId}
   `;
-    // TODO: Also change last_performed
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to update last performed date.");
+  }
+}
+
+async function updateIsAddedForMainExerciseTrue(mainExerciseId: string) {
+  try {
+    await sql`
+    UPDATE exercises
+      SET is_added_to_today = true
+      WHERE id = ${mainExerciseId}
+  `;
   } catch (error) {
     console.error("Database Error:", error);
     throw new Error("Failed to update isAdded data.");
@@ -141,7 +138,6 @@ export async function deleteTodaysExerciseWithId(
 
 export async function updatePR(mainExerciseId: string, newPr: number) {
   try {
-    const todaysDate = new Date().toISOString().split("T")[0];
     await sql`
     UPDATE exercises
     SET

@@ -11,7 +11,6 @@ import {
   TodaysExercise,
 } from "./definitions";
 import { formatCurrency } from "./utils";
-import { cacheTag } from "next/cache";
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: "require" });
 
