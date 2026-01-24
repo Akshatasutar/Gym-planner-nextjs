@@ -27,6 +27,9 @@ export default function TodaysExerciseCard({
   dragStartFn: (e: React.DragEvent<HTMLDivElement>) => void;
   dragEnterFn: (e: React.DragEvent<HTMLDivElement>) => void;
   dragEndFn: (e: React.DragEvent<HTMLDivElement>) => void;
+  // dragStartFn: (e: React.TouchEvent<HTMLDivElement>) => void;
+  // dragEnterFn: (e: React.TouchEvent<HTMLDivElement>) => void;
+  // dragEndFn: (e: React.TouchEvent<HTMLDivElement>) => void;
 }) {
   const [statusArray, setStatusArray] = useState<Array<boolean>>(
     new Array<boolean>(exercise.total_sets).fill(false),
@@ -54,10 +57,13 @@ export default function TodaysExerciseCard({
     <div
       id={exercise.id}
       draggable
+      // onTouchStart={(e) => dragStartFn(e)}
+      // onTouchE
+      // onTouchEnd={(e) => dragEndFn(e)}
       onDragStart={(e) => dragStartFn(e)}
       onDragEnter={(e) => dragEnterFn(e)}
       onDragEnd={(e) => dragEndFn(e)}
-      className={clsx(styles.card, "bg-gray-50", {
+      className={clsx(styles.card, "bg-gray-50 w-full mr-1", {
         "bg-green-100": isAllSetsCompleted,
       })}
     >
@@ -125,13 +131,13 @@ export default function TodaysExerciseCard({
             className="h-6 w-10 bg-red-700 px-1 enabled:hover:bg-red-400 active:bg-red-300 disabled:bg-gray-400"
             disabled={isAllSetsCompleted}
           >
-            <TrashIcon className="text-gray-50 m-2" />
+            <TrashIcon className="text-gray-50 m-1" />
           </Button>
         </form>
 
-        <button className="flex items-center justify-center h-4/5 w-full hover:cursor-grab active:cursor-grabbing">
+        {/* <button className="flex items-center justify-center h-4/5 w-full hover:cursor-grab active:cursor-grabbing">
           <ChevronUpDownIcon className="h-6" />
-        </button>
+        </button> */}
       </div>
     </div>
   );

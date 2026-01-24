@@ -42,15 +42,20 @@ export default function TodaysExercisesCardList({
 
   return (
     <div>
-      {todaysList.map((exercise) => (
+      {todaysList.map((exercise, idx) => (
         <Suspense key={exercise.id} fallback={<CardSkeleton />}>
-          <TodaysExerciseCard
-            key={exercise.id}
-            exercise={exercise}
-            dragStartFn={onDragStart}
-            dragEnterFn={onDragEnter}
-            dragEndFn={onDrop}
-          />
+          <div className="flex flex-row gap-1 w-full">
+            <div className="bg-purple-100 border border-purple-300 h-6 px-2 rounded-full my-4 mr-1 text-l text-purple-800">
+              {(idx + 1).toString()}
+            </div>
+            <TodaysExerciseCard
+              key={exercise.id}
+              exercise={exercise}
+              dragStartFn={onDragStart}
+              dragEnterFn={onDragEnter}
+              dragEndFn={onDrop}
+            />
+          </div>
         </Suspense>
       ))}
     </div>
