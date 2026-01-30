@@ -124,21 +124,19 @@ export default function TodaysExerciseCard({
           }`}</p>
         </div>
       </div>
-      <div>
-        <form action={handleDeleteIndividual}>
-          <Button
-            type="submit"
-            className="h-6 w-10 bg-red-700 px-1 enabled:hover:bg-red-400 active:bg-red-300 disabled:bg-gray-400"
-            disabled={isAllSetsCompleted}
-          >
-            <TrashIcon className="text-gray-50 m-1" />
-          </Button>
-        </form>
+      <form action={handleDeleteIndividual}>
+        <button
+          type="submit"
+          className="flex items-center rounded-lg h-6 w-10 bg-red-700 px-2 justify-center enabled:hover:bg-red-400 active:bg-red-300 disabled:bg-gray-400"
+          disabled={isAllSetsCompleted}
+        >
+          <TrashIcon className="text-gray-50 h-6 w-5" />
+        </button>
+      </form>
 
-        {/* <button className="flex items-center justify-center h-4/5 w-full hover:cursor-grab active:cursor-grabbing">
+      {/* <button className="flex items-center justify-center h-4/5 w-full hover:cursor-grab active:cursor-grabbing">
           <ChevronUpDownIcon className="h-6" />
         </button> */}
-      </div>
     </div>
   );
 }
