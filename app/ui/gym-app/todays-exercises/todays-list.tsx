@@ -14,7 +14,7 @@ export default function TodaysExercisesCardList({
   const draggedItem = useRef("");
   const draggedOverItem = useRef("");
 
-  const onDragStart = (e: React.DragEvent<HTMLDivElement>) => {
+  const onDragStart = (e: React.TouchEvent<HTMLDivElement>) => {
     draggedItem.current = (e.target as HTMLDivElement).id;
   };
 
