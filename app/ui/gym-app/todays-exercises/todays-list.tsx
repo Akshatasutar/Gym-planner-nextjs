@@ -17,17 +17,32 @@ export default function TodaysExercisesCardList({
   const onDragStart = (e: React.PointerEvent<HTMLDivElement>) => {
     draggedItem.current = (e.currentTarget as HTMLDivElement).id;
     e.currentTarget.setPointerCapture(e.pointerId);
-    // console.log("Dragged item: ", draggedItem.current);
+    e.currentTarget.classList.add(
+      "opacity-70",
+      "scale-105",
+      "cursor-grabbing",
+      "shadow-xl",
+      "z-50",
+    );
   };
 
   const onDragEnter = (e: React.PointerEvent<HTMLDivElement>) => {
     const el = document.elementFromPoint(e.clientX, e.clientY);
     if (el?.id) draggedOverItem.current = el?.id;
-    // console.log("Dragged OVER item: ", draggedOverItem.current);
   };
 
   const onDrop = (e: any) => {
     e.currentTarget.releasePointerCapture(e.pointerId);
+    e.currentTarget.classList.remove(
+      "opacity-70",
+      "scale-105",
+      "scale-85",
+      "cursor-grabbing",
+      "shadow-xl",
+      "z-50",
+      "z-10",
+    );
+
     const currentList = [...todaysList];
     const draggedItemIndex = todaysList.findIndex(
       (item) => item.id == draggedItem.current,

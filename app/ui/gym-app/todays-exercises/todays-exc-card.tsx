@@ -24,17 +24,10 @@ export default function TodaysExerciseCard({
   dragEndFn,
 }: {
   exercise: TodaysExercise;
-  // dragStartFn: (e: React.DragEvent<HTMLDivElement>) => void;
-  // dragEnterFn: (e: React.DragEvent<HTMLDivElement>) => void;
-  // dragEndFn: (e: React.DragEvent<HTMLDivElement>) => void;
 
   dragStartFn: (e: React.PointerEvent<HTMLDivElement>) => void;
   dragEnterFn: (e: React.PointerEvent<HTMLDivElement>) => void;
   dragEndFn: (e: React.PointerEvent<HTMLDivElement>) => void;
-
-  // dragStartFn: (e: React.TouchEvent<HTMLDivElement>) => void;
-  // dragEnterFn: (e: React.TouchEvent<HTMLDivElement>) => void;
-  // dragEndFn: (e: React.TouchEvent<HTMLDivElement>) => void;
 }) {
   const [statusArray, setStatusArray] = useState<Array<boolean>>(
     new Array<boolean>(exercise.total_sets).fill(false),
@@ -62,21 +55,16 @@ export default function TodaysExerciseCard({
     <div
       id={exercise.id}
       draggable
-      // onTouchStart={(e) => dragStartFn(e)}
-      // onTouchMove={(e) => dragStartFn(e)}
-      // onTouchEnd={(e) => dragEndFn(e)}
-
-      // onDragStart={(e) => dragStartFn(e)}
-      // onDragEnter={(e) => dragEnterFn(e)}
-      // onDragEnd={(e) => dragEndFn(e)}
-
       onPointerDown={(e) => dragStartFn(e)}
       onPointerMove={(e) => dragEnterFn(e)}
-      // onPointerEnter={(e) => dragEnterFn(e)}
       onPointerUp={(e) => dragEndFn(e)}
-      className={clsx(styles.card, "bg-gray-50 w-full mr-1 touch-none", {
-        "bg-green-100": isAllSetsCompleted,
-      })}
+      className={clsx(
+        styles.card,
+        "bg-gray-50 w-full mr-1 touch-none active:bg-gray-100",
+        {
+          "bg-green-100": isAllSetsCompleted,
+        },
+      )}
     >
       <div className="mr-2 w-full">
         <p>
