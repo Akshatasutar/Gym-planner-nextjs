@@ -14,15 +14,20 @@ export default function TodaysExercisesCardList({
   const draggedItem = useRef("");
   const draggedOverItem = useRef("");
 
-  const onDragStart = (e: React.TouchEvent<HTMLDivElement>) => {
-    draggedItem.current = (e.target as HTMLDivElement).id;
+  const onDragStart = (e: React.PointerEvent<HTMLDivElement>) => {
+    draggedItem.current = (e.currentTarget as HTMLDivElement).id;
+    e.currentTarget.setPointerCapture(e.pointerId);
+    // console.log("Dragged item: ", draggedItem.current);
   };
 
-  const onDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
-    draggedOverItem.current = (e.currentTarget as HTMLDivElement).id;
+  const onDragEnter = (e: React.PointerEvent<HTMLDivElement>) => {
+    const el = document.elementFromPoint(e.clientX, e.clientY);
+    if (el?.id) draggedOverItem.current = el?.id;
+    // console.log("Dragged OVER item: ", draggedOverItem.current);
   };
 
   const onDrop = (e: any) => {
+    e.currentTarget.releasePointerCapture(e.pointerId);
     const currentList = [...todaysList];
     const draggedItemIndex = todaysList.findIndex(
       (item) => item.id == draggedItem.current,
@@ -54,6 +59,7 @@ export default function TodaysExercisesCardList({
               dragStartFn={onDragStart}
               dragEnterFn={onDragEnter}
               dragEndFn={onDrop}
+              data-drop-id={exercise.id}
             />
           </div>
         </Suspense>
