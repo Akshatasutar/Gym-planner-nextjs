@@ -24,12 +24,12 @@ export default function TodaysExerciseCard({
   dragEndFn,
 }: {
   exercise: TodaysExercise;
-  dragStartFn: (e: React.DragEvent<HTMLDivElement>) => void;
+  // dragStartFn: (e: React.DragEvent<HTMLDivElement>) => void;
   dragEnterFn: (e: React.DragEvent<HTMLDivElement>) => void;
-  dragEndFn: (e: React.DragEvent<HTMLDivElement>) => void;
-  // dragStartFn: (e: React.TouchEvent<HTMLDivElement>) => void;
+  // dragEndFn: (e: React.DragEvent<HTMLDivElement>) => void;
+  dragStartFn: (e: React.TouchEvent<HTMLDivElement>) => void;
   // dragEnterFn: (e: React.TouchEvent<HTMLDivElement>) => void;
-  // dragEndFn: (e: React.TouchEvent<HTMLDivElement>) => void;
+  dragEndFn: (e: React.TouchEvent<HTMLDivElement>) => void;
 }) {
   const [statusArray, setStatusArray] = useState<Array<boolean>>(
     new Array<boolean>(exercise.total_sets).fill(false),
@@ -57,12 +57,12 @@ export default function TodaysExerciseCard({
     <div
       id={exercise.id}
       draggable
-      // onTouchStart={(e) => dragStartFn(e)}
-      // onTouchE
-      // onTouchEnd={(e) => dragEndFn(e)}
-      onDragStart={(e) => dragStartFn(e)}
+      onTouchStart={(e) => dragStartFn(e)}
+      onTouchMove={(e) => dragStartFn(e)}
+      onTouchEnd={(e) => dragEndFn(e)}
+      // onDragStart={(e) => dragStartFn(e)}
       onDragEnter={(e) => dragEnterFn(e)}
-      onDragEnd={(e) => dragEndFn(e)}
+      // onDragEnd={(e) => dragEndFn(e)}
       className={clsx(styles.card, "bg-gray-50 w-full mr-1", {
         "bg-green-100": isAllSetsCompleted,
       })}
@@ -127,10 +127,10 @@ export default function TodaysExerciseCard({
       <form action={handleDeleteIndividual}>
         <button
           type="submit"
-          className="flex items-center rounded-lg h-6 w-10 bg-red-700 px-2 justify-center enabled:hover:bg-red-400 active:bg-red-300 disabled:bg-gray-400"
+          className="flex items-center rounded-lg h-6 w-10 bg-red-700 px-3 justify-center enabled:hover:bg-red-400 active:bg-red-300 disabled:bg-gray-400"
           disabled={isAllSetsCompleted}
         >
-          <TrashIcon className="text-gray-50 h-6 w-5" />
+          <TrashIcon className="text-gray-50" />
         </button>
       </form>
 
