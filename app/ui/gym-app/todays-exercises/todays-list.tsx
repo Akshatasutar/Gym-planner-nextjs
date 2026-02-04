@@ -1,5 +1,5 @@
 "use client";
-import { Suspense, useMemo, useRef, useState } from "react";
+import { Suspense, useState } from "react";
 import TodaysExerciseCard from "./todays-exc-card";
 import { TodaysExercise } from "@/app/lib/definitions";
 import { CardSkeleton } from "../../skeletons";
@@ -11,51 +11,25 @@ export default function TodaysExercisesCardList({
 }) {
   const [todaysList, setTodaysList] =
     useState<TodaysExercise[]>(todaysExercises);
-  const draggedItem = useRef("");
-  const draggedOverItem = useRef("");
 
-  const onDragStart = (e: React.PointerEvent<HTMLDivElement>) => {
-    draggedItem.current = (e.currentTarget as HTMLDivElement).id;
-    e.currentTarget.setPointerCapture(e.pointerId);
-    e.currentTarget.classList.add(
-      "opacity-70",
-      "scale-105",
-      "cursor-grabbing",
-      "shadow-xl",
-      "z-50",
-    );
-  };
-
-  const onDragEnter = (e: React.PointerEvent<HTMLDivElement>) => {
-    const el = document.elementFromPoint(e.clientX, e.clientY);
-    if (el?.id) draggedOverItem.current = el?.id;
-  };
-
-  const onDrop = (e: any) => {
-    e.currentTarget.releasePointerCapture(e.pointerId);
-    e.currentTarget.classList.remove(
-      "opacity-70",
-      "scale-105",
-      "scale-85",
-      "cursor-grabbing",
-      "shadow-xl",
-      "z-50",
-      "z-10",
-    );
-
+  const moveUp = (excId: string) => {
     const currentList = [...todaysList];
-    const draggedItemIndex = todaysList.findIndex(
-      (item) => item.id == draggedItem.current,
-    );
-    const draggedExercise = todaysList[draggedItemIndex];
+    const currentExcIndex = todaysList.findIndex((item) => item.id == excId);
+    const currentExc = todaysList[currentExcIndex];
+    const excAbove = todaysList[currentExcIndex - 1];
+    currentList[currentExcIndex] = excAbove;
+    currentList[currentExcIndex - 1] = currentExc;
 
-    const draggedOverItemIndex = todaysList.findIndex(
-      (item) => item.id == draggedOverItem.current,
-    );
-    const draggedOverExercise = todaysList[draggedOverItemIndex];
+    setTodaysList(currentList);
+  };
 
-    currentList[draggedOverItemIndex] = draggedExercise;
-    currentList[draggedItemIndex] = draggedOverExercise;
+  const moveDown = (excId: string) => {
+    const currentList = [...todaysList];
+    const currentExcIndex = todaysList.findIndex((item) => item.id == excId);
+    const currentExc = todaysList[currentExcIndex];
+    const excBelow = todaysList[currentExcIndex + 1];
+    currentList[currentExcIndex] = excBelow;
+    currentList[currentExcIndex + 1] = currentExc;
 
     setTodaysList(currentList);
   };
@@ -71,10 +45,10 @@ export default function TodaysExercisesCardList({
             <TodaysExerciseCard
               key={exercise.id}
               exercise={exercise}
-              dragStartFn={onDragStart}
-              dragEnterFn={onDragEnter}
-              dragEndFn={onDrop}
-              data-drop-id={exercise.id}
+              moveExerciseUp={moveUp}
+              moveExerciseDown={moveDown}
+              isFirstExercise={idx == 0}
+              isLastExercise={idx == todaysList.length - 1}
             />
           </div>
         </Suspense>

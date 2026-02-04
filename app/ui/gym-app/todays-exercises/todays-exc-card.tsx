@@ -2,7 +2,8 @@
 import { TodaysExercise } from "@/app/lib/definitions";
 import {
   CheckCircleIcon,
-  ChevronUpDownIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
   PencilIcon,
   TrashIcon,
 } from "@heroicons/react/24/outline";
@@ -19,15 +20,16 @@ import { Button } from "../../button";
 
 export default function TodaysExerciseCard({
   exercise,
-  dragStartFn,
-  dragEnterFn,
-  dragEndFn,
+  moveExerciseUp,
+  moveExerciseDown,
+  isFirstExercise = false,
+  isLastExercise = false,
 }: {
   exercise: TodaysExercise;
-
-  dragStartFn: (e: React.PointerEvent<HTMLDivElement>) => void;
-  dragEnterFn: (e: React.PointerEvent<HTMLDivElement>) => void;
-  dragEndFn: (e: React.PointerEvent<HTMLDivElement>) => void;
+  moveExerciseUp: (excId: string) => void;
+  moveExerciseDown: (excId: string) => void;
+  isFirstExercise?: boolean;
+  isLastExercise?: boolean;
 }) {
   const [statusArray, setStatusArray] = useState<Array<boolean>>(
     new Array<boolean>(exercise.total_sets).fill(false),
@@ -54,10 +56,6 @@ export default function TodaysExerciseCard({
   return (
     <div
       id={exercise.id}
-      draggable
-      onPointerDown={(e) => dragStartFn(e)}
-      onPointerMove={(e) => dragEnterFn(e)}
-      onPointerUp={(e) => dragEndFn(e)}
       className={clsx(
         styles.card,
         "bg-gray-50 w-full mr-1 touch-none active:bg-gray-100",
@@ -132,10 +130,28 @@ export default function TodaysExerciseCard({
           <TrashIcon className="text-gray-50" />
         </button>
       </form>
-
-      {/* <button className="flex items-center justify-center h-4/5 w-full hover:cursor-grab active:cursor-grabbing">
-          <ChevronUpDownIcon className="h-6" />
-        </button> */}
+      <div className="mt-10 flex flex-col gap-3">
+        <button
+          className={clsx(
+            styles.changeOrderChevronButton,
+            "disabled:text-gray-300",
+          )}
+          onClick={() => moveExerciseUp(exercise.id)}
+          disabled={isFirstExercise}
+        >
+          <ChevronUpIcon className="h-5" />
+        </button>
+        <button
+          className={clsx(
+            styles.changeOrderChevronButton,
+            "disabled:text-gray-300",
+          )}
+          onClick={() => moveExerciseDown(exercise.id)}
+          disabled={isLastExercise}
+        >
+          <ChevronDownIcon className="h-5" />
+        </button>
+      </div>
     </div>
   );
 }
