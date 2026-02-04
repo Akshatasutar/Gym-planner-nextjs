@@ -3,7 +3,7 @@
 import postgres from "postgres";
 import { z } from "zod";
 import { Exercise } from "./definitions";
-import { refresh, revalidatePath, revalidateTag } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: "require" });
 const todaysDate = new Date().toISOString().split("T")[0];
@@ -116,7 +116,7 @@ export async function deleteAllTodaysExercises() {
 
 export async function deleteTodaysExerciseWithId(
   exerciseId: string,
-  mainExerciseId: string
+  mainExerciseId: string,
 ) {
   try {
     await sql`
@@ -128,7 +128,7 @@ export async function deleteTodaysExerciseWithId(
   } catch (error) {
     console.error("Database Error:", error);
     throw new Error(
-      "Failed to delete today's exercise with id" + `${exerciseId}`
+      "Failed to delete today's exercise with id" + `${exerciseId}`,
     );
   }
 
