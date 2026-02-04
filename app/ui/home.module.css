@@ -27,11 +27,6 @@
   width: full;
   color: oklch(55.1% 0.027 264.364);
   :disabled {
-    background-color: blueviolet;
     color: oklch(86.9% 0.022 252.894);
   }
-}
-
-.changeOrderChevronButton :disabled {
-  background-color: blueviolet;
 }

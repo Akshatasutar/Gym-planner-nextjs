@@ -58,7 +58,7 @@ export default function TodaysExerciseCard({
       id={exercise.id}
       className={clsx(
         styles.card,
-        "bg-gray-50 w-full mr-1 touch-none active:bg-gray-100",
+        "bg-gray-50 w-full mr-1 active:bg-gray-100",
         {
           "bg-green-100": isAllSetsCompleted,
         },
