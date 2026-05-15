@@ -3,14 +3,20 @@ import { Suspense, useState } from "react";
 import TodaysExerciseCard from "./todays-exc-card";
 import { TodaysExercise } from "@/app/lib/definitions";
 import { CardSkeleton } from "../../skeletons";
+import { updateExerciseOrder } from "@/app/lib/actions";
 
 export default function TodaysExercisesCardList({
   todaysExercises,
 }: {
   todaysExercises: TodaysExercise[];
 }) {
-  const [todaysList, setTodaysList] =
-    useState<TodaysExercise[]>(todaysExercises);
+  const [todaysList, setTodaysList] = useState<TodaysExercise[]>(
+    todaysExercises.sort(
+      (a, b) =>
+        (a.exercise_order ?? todaysExercises.length - 1) -
+        (b.exercise_order ?? todaysExercises.length - 1),
+    ),
+  );
 
   const moveUp = (excId: string) => {
     const currentList = [...todaysList];
@@ -21,6 +27,7 @@ export default function TodaysExercisesCardList({
     currentList[currentExcIndex - 1] = currentExc;
 
     setTodaysList(currentList);
+    updateExerciseOrder(excId, currentExcIndex - 1);
   };
 
   const moveDown = (excId: string) => {
@@ -32,6 +39,7 @@ export default function TodaysExercisesCardList({
     currentList[currentExcIndex + 1] = currentExc;
 
     setTodaysList(currentList);
+    updateExerciseOrder(excId, currentExcIndex + 1);
   };
 
   return (

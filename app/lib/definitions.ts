@@ -125,8 +125,7 @@ export type TodaysExercise = {
   date_of_pr?: string;
   // last_performed?: string;
   total_sets: number;
-  // finished_sets: number;
+  finished_sets: number;
+  exercise_order: number;
   // is_completed: boolean;
 };
-
-// Today's exercise list

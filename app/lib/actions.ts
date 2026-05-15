@@ -78,10 +78,12 @@ async function updateAllIsAddedFalse() {
 export async function addExerciseToTodaysList(exercise: Exercise) {
   try {
     await sql`
-    INSERT INTO todays_exercises (exercise_name, total_sets, main_exercise_id)
+    INSERT INTO todays_exercises (exercise_name, total_sets, main_exercise_id, finished_sets, exercise_order)
         VALUES (${exercise.name},
         3, 
-        ${exercise.id}
+        ${exercise.id},
+        0,
+        null
         )
   `;
   } catch (error) {
@@ -94,7 +96,6 @@ export async function addExerciseToTodaysList(exercise: Exercise) {
 
   // Update UI
   revalidatePath("/all-views/todays-exercises");
-  revalidateTag("fetch-exercises", "max");
   revalidatePath("/all-views/main-exercises");
 }
 
@@ -152,4 +153,48 @@ export async function updatePR(mainExerciseId: string, newPr: number) {
 
   // Update UI
   revalidatePath("/all-views/main-exercises");
+}
+
+export async function updateFinishedSets(
+  todaysExerciseId: string,
+  finishedSets: number,
+) {
+  try {
+    await sql`
+    UPDATE todays_exercises
+    SET
+      finished_sets = ${finishedSets}
+    WHERE id = ${todaysExerciseId}
+    `;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error(
+      "Failed to update finished sets for " + `${todaysExerciseId}`,
+    );
+  }
+
+  // Update UI
+  revalidatePath("/all-views/todays-exercises");
+}
+
+export async function updateExerciseOrder(
+  todaysExerciseId: string,
+  newOrder: number,
+) {
+  try {
+    await sql`
+    UPDATE todays_exercises
+    SET
+      exercise_order = ${newOrder}
+    WHERE id = ${todaysExerciseId}
+    `;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error(
+      "Failed to update exercise order for " + `${todaysExerciseId}`,
+    );
+  }
+
+  // Update UI
+  revalidatePath("/all-views/todays-exercises");
 }

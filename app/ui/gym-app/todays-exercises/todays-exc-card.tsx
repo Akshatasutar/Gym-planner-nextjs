@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import styles from "@/app/ui/home.module.css";
 import {
   deleteTodaysExerciseWithId,
+  updateFinishedSets,
   updateLastPerformedDate,
 } from "@/app/lib/actions";
 import EditPrInput from "../../edit-pr-input";
@@ -32,7 +33,9 @@ export default function TodaysExerciseCard({
   isLastExercise?: boolean;
 }) {
   const [statusArray, setStatusArray] = useState<Array<boolean>>(
-    new Array<boolean>(exercise.total_sets).fill(false),
+    new Array<boolean>(exercise.total_sets)
+      .fill(true, 0, exercise.finished_sets)
+      .fill(false, exercise.finished_sets),
   );
   const [isAllSetsCompleted, setIsAllSetsCompleted] = useState<boolean>(
     false,
@@ -47,6 +50,11 @@ export default function TodaysExerciseCard({
   );
 
   useEffect(() => {
+    updateFinishedSets(
+      exercise.id,
+      statusArray.filter((isDone) => isDone).length,
+    );
+
     if (statusArray.every((isSetDone) => isSetDone)) {
       setIsAllSetsCompleted(true);
       updateLastPerformedDate(exercise.main_exercise_id);
